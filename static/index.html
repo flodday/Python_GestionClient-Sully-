@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Factures</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-link active" data-page="invoices">Factures</a>
+            <a href="#" class="nav-link" data-page="clients">Clients</a>
+            <a href="#" class="nav-link" data-page="products">Produits</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Factures -->
+        <div id="invoicesPage" class="page active">
+            <h1>Gestion des Factures</h1>
+            
+            <div class="search-section">
+                <div class="actions-bar">
+                    <input type="text" id="searchInput" placeholder="Recherche par année ou montant...">
+                    <button onclick="showAddInvoiceForm()">Ajouter une facture</button>
+                </div>
+                
+                
+            </div>
+
+            <!-- Formulaire d'ajout de facture -->
+            <div id="addInvoiceForm" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Ajouter une nouvelle facture</h2>
+                    <form id="newInvoiceForm">
+                        <div class="form-group">
+                            <label for="newInvoiceClient">Client:</label>
+                            <select id="newInvoiceClient" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newInvoiceDate">Date:</label>
+                            <input type="date" id="newInvoiceDate" required>
+                        </div>
+                        <div id="productsList">
+                            <h3>Produits</h3>
+                            <div class="product-entries"></div>
+                            <button type="button" onclick="addProductEntry()">Ajouter un produit</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Total:</label>
+                            <span id="invoiceTotal">0.00 €</span>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit">Enregistrer</button>
+                            <button type="button" onclick="hideAddInvoiceForm()">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="invoices-container">
+                <div class="invoices-list">
+                    <h2>Liste des Factures</h2>
+                    <div id="invoicesList"></div>
+                </div>
+
+                <div class="invoice-details-container">
+                    <div id="invoiceDetails">
+                        <h2>Détails de la Facture</h2>
+                        <div id="selectedInvoice"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Clients -->
+        <div id="clientsPage" class="page">
+            <h1>Gestion des Clients</h1>
+            <div class="actions-bar">
+                <input type="text" id="clientSearchInput" placeholder="Rechercher un client...">
+                <button onclick="showAddClientForm()">Ajouter un client</button>
+            </div>
+            <div class="data-list" id="clientsList"></div>
+
+            <!-- Formulaire d'ajout de client -->
+            <div id="addClientForm" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Ajouter un nouveau client</h2>
+                    <form id="newClientForm">
+                        <div class="form-group">
+                            <label for="newClientName">Nom:</label>
+                            <input type="text" id="newClientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newClientAddress">Adresse:</label>
+                            <textarea id="newClientAddress" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="newClientTel">Téléphone:</label>
+                            <input type="tel" id="newClientTel" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newClientEmail">Email:</label>
+                            <input type="email" id="newClientEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newClientSex">Sexe:</label>
+                            <select id="newClientSex" required>
+                                <option value="M">Homme</option>
+                                <option value="F">Femme</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newClientBirth">Date de naissance:</label>
+                            <input type="date" id="newClientBirth" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit">Enregistrer</button>
+                            <button type="button" onclick="hideAddClientForm()">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Produits -->
+        <div id="productsPage" class="page">
+            <h1>Gestion des Produits</h1>
+            <div class="actions-bar">
+                <input type="text" id="productSearchInput" placeholder="Rechercher un produit...">
+                <button onclick="showAddProductForm()">Ajouter un produit</button>
+            </div>
+            <div class="data-list" id="productsListContainer"></div>
+
+            <!-- Formulaire d'ajout de produit -->
+            <div id="addProductForm" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Ajouter un nouveau produit</h2>
+                    <form id="newProductForm">
+                        <div class="form-group">
+                            <label for="newProductName">Nom:</label>
+                            <input type="text" id="newProductName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newProductCategory">Catégorie:</label>
+                            <select id="newProductCategory" required>
+                                <option value="Vêtements et Accessoires">Vêtements et Accessoires</option>
+                                <option value="Articles Ménagers">Articles Ménagers</option>
+                                <option value="Articles de Luxe">Articles de Luxe</option>
+                                <option value="Électronique">Électronique</option>
+                                <option value="Mode de Vie">Mode de Vie</option>
+                                <option value="Articles Tendance">Articles Tendance</option>
+                                <option value="Produits de Beauté">Produits de Beauté</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newProductPrice">Prix:</label>
+                            <input type="number" id="newProductPrice" step="0.01" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit">Enregistrer</button>
+                            <button type="button" onclick="hideAddProductForm()">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html> 
